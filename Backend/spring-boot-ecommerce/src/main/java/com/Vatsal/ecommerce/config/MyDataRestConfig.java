@@ -12,7 +12,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.Vatsal.ecommerce.dao.ProductRepository;
+import com.Vatsal.ecommerce.entity.Country;
 import com.Vatsal.ecommerce.entity.Product;
+import com.Vatsal.ecommerce.entity.State;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.EntityType;
@@ -34,18 +36,20 @@ public class MyDataRestConfig implements RepositoryRestConfigurer{
 
         HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.POST};
 
-        config.getExposureConfiguration()
-              .forDomainType(Product.class)
-              .withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
-              .withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
-    
-        config.getExposureConfiguration()
-        .forDomainType(ProductRepository.class)
-        .withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
-        .withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions));  
+        disableHttpMethods(Product.class, config, theUnsupportedActions);  
+        disableHttpMethods(ProductRepository.class, config, theUnsupportedActions); 
+        disableHttpMethods(Country.class, config, theUnsupportedActions);  
+        disableHttpMethods(State.class, config, theUnsupportedActions);   
     
             // expose Id
             exposeIds(config);
+    }
+
+    private void disableHttpMethods(Class theClass, RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
+        config.getExposureConfiguration()
+        .forDomainType(theClass)
+        .withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
+        .withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
     }
 
     private void exposeIds(RepositoryRestConfiguration config)
