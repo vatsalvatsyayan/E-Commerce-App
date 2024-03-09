@@ -16,7 +16,13 @@ import { CartDetailsComponent } from './component/cart-details/cart-details.comp
 import { CheckoutComponent } from './component/checkout/checkout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { AuthModule } from '@auth0/auth0-angular';
+import { LoginComponent } from './component/login/login.component';
+import { LoginStatusComponent } from './component/login-status/login-status.component';
+
+
 const routes: Routes = [
+  {path: 'login', component: LoginComponent},
   {path: 'checkout', component: CheckoutComponent},
   {path: 'cart-details', component: CartDetailsComponent},
   {path: 'products/:id', component: ProductDetailsComponent},
@@ -38,13 +44,23 @@ const routes: Routes = [
     CartStatusComponent,
     CartDetailsComponent,
     CheckoutComponent,
+    LoginComponent,
+    LoginStatusComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),
     BrowserModule,
     HttpClientModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AuthModule.forRoot({
+      domain: 'dev-6ztx7jb2twrna510.us.auth0.com',
+      clientId: '4NqVSDiUS60mNQh50QauYr18K5EpO2Iz',
+      authorizationParams: {
+        redirect_uri: 'http://localhost:4200',
+        scope: 'openid profile email',
+      },
+    }),
   ],
   providers: [ProductService],
   bootstrap: [AppComponent]
