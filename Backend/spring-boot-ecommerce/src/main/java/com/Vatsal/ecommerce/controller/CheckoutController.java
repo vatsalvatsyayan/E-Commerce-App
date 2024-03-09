@@ -10,7 +10,6 @@ import com.Vatsal.ecommerce.dto.Purchase;
 import com.Vatsal.ecommerce.dto.PurchaseResponse;
 import com.Vatsal.ecommerce.service.CheckoutService;
 
-@CrossOrigin()
 @RestController
 @RequestMapping("/api/checkout")
 public class CheckoutController {

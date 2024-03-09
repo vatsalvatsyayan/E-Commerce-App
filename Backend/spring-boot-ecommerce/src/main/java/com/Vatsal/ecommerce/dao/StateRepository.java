@@ -9,7 +9,6 @@ import com.Vatsal.ecommerce.entity.State;
 
 import java.util.List;
 
-@CrossOrigin()
 @RepositoryRestResource
 public interface StateRepository extends JpaRepository<State, Integer> {
 
