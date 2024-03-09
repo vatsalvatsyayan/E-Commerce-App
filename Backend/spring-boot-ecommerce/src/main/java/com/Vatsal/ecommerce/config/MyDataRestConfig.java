@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -22,6 +23,9 @@ import jakarta.persistence.metamodel.EntityType;
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer{
 
+    @Value("${allowed.orgins}")
+    private String[] theAllowedOrigins;
+    
     private EntityManager entityManager;
 
     @Autowired
@@ -34,15 +38,18 @@ public class MyDataRestConfig implements RepositoryRestConfigurer{
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         RepositoryRestConfigurer.super.configureRepositoryRestConfiguration(config, cors);
 
-        HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.POST};
+        HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.POST, HttpMethod.PATCH};
 
         disableHttpMethods(Product.class, config, theUnsupportedActions);  
         disableHttpMethods(ProductRepository.class, config, theUnsupportedActions); 
         disableHttpMethods(Country.class, config, theUnsupportedActions);  
         disableHttpMethods(State.class, config, theUnsupportedActions);   
     
-            // expose Id
-            exposeIds(config);
+        // expose Id
+        exposeIds(config);
+
+        // configure cors mapping
+        cors.addMapping(config.getBasePath() +  "/**").allowedOrigins(theAllowedOrigins);
     }
 
     private void disableHttpMethods(Class theClass, RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
