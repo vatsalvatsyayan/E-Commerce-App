@@ -1,0 +1,11 @@
+<div *ngIf="auth.user$ | async as user">
+    <h2>Welcome</h2>
+    <p>{{ user.email }}</p>
+    <p>{{ user.name }} - {{user.address}} - {{user.profile}}</p>
+</div>
+<h2>
+    Hello
+</h2>
+    <!-- <div *ngIf="auth.getAccessTokenSilently() | async as accessToken">
+        <p>Access Token: {{ accessToken }}</p>
+    </div> -->
