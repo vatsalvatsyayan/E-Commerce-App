@@ -20,6 +20,7 @@ import { AuthGuard, AuthHttpInterceptor, AuthModule, AuthService } from '@auth0/
 import { LoginComponent } from './component/login/login.component';
 import { LoginStatusComponent } from './component/login-status/login-status.component';
 import { MembersPageComponent } from './component/members-page/members-page.component';
+import { OrderHistoryComponent } from './component/order-history/order-history.component';
 
 function sendToLoginPage(auth: AuthService, injector : Injector){
     // use injector to acccess any service available within your app
@@ -30,6 +31,10 @@ function sendToLoginPage(auth: AuthService, injector : Injector){
 }
 
 const routes: Routes = [
+  {path: 'order-history', component: OrderHistoryComponent, canActivate: [AuthGuard],
+                    data: {onAuthRequired: sendToLoginPage}},
+
+                    {path: 'login', component: LoginComponent},
   {path: 'members', component: MembersPageComponent, canActivate: [AuthGuard],
                     data: {onAuthRequired: sendToLoginPage}},
   
@@ -60,6 +65,7 @@ const routes: Routes = [
     LoginComponent,
     LoginStatusComponent,
     MembersPageComponent,
+    OrderHistoryComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),

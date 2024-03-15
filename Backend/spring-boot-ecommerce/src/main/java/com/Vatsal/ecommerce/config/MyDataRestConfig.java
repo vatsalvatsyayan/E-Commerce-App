@@ -1,10 +1,10 @@
 package com.Vatsal.ecommerce.config;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.Vatsal.ecommerce.dao.ProductRepository;
 import com.Vatsal.ecommerce.entity.Country;
+import com.Vatsal.ecommerce.entity.Order;
 import com.Vatsal.ecommerce.entity.Product;
 import com.Vatsal.ecommerce.entity.State;
 
@@ -28,7 +29,6 @@ public class MyDataRestConfig implements RepositoryRestConfigurer{
     
     private EntityManager entityManager;
 
-    @Autowired
     public MyDataRestConfig(EntityManager theEntityManager)
     {
         entityManager = theEntityManager;
@@ -44,7 +44,9 @@ public class MyDataRestConfig implements RepositoryRestConfigurer{
         disableHttpMethods(ProductRepository.class, config, theUnsupportedActions); 
         disableHttpMethods(Country.class, config, theUnsupportedActions);  
         disableHttpMethods(State.class, config, theUnsupportedActions);   
-    
+        disableHttpMethods(Order.class, config, theUnsupportedActions);   
+
+
         // expose Id
         exposeIds(config);
 
@@ -52,7 +54,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer{
         cors.addMapping(config.getBasePath() +  "/**").allowedOrigins(theAllowedOrigins);
     }
 
-    private void disableHttpMethods(Class theClass, RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
+    private void disableHttpMethods(Class<?> theClass, RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
         config.getExposureConfiguration()
         .forDomainType(theClass)
         .withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions))

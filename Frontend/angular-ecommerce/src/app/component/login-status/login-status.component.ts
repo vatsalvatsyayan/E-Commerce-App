@@ -10,7 +10,9 @@ export class LoginStatusComponent implements OnInit {
 
   isAuthenticated: boolean = false;
   userFullName: string = '';
-  
+
+  storage: Storage = sessionStorage;
+
   constructor(public auth: AuthService) { }
 
   ngOnInit(): void {
@@ -33,6 +35,10 @@ export class LoginStatusComponent implements OnInit {
       (user) => {
         if (user) {
           this.userFullName = user.name as string;
+
+          const theEmail = user.email;
+
+          this.storage.setItem('userEmail', JSON.stringify(theEmail));
         }
       }
     );
