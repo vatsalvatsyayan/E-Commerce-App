@@ -77,7 +77,7 @@ const routes: Routes = [
       domain: 'dev-6ztx7jb2twrna510.us.auth0.com',
       clientId: '4NqVSDiUS60mNQh50QauYr18K5EpO2Iz',
       authorizationParams: {
-        redirect_uri: 'http://localhost:4200',
+        redirect_uri: 'https://localhost:4200',
         audience: 'http://localhost:8080',
         scope: 'openid profile email',
       },
