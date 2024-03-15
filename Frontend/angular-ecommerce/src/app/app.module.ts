@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { ProductListComponent } from './component/product-list/product-list.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ProductService } from './services/product.service';
 
 import { Routes, RouterModule, Router} from '@angular/router';
@@ -16,7 +16,7 @@ import { CartDetailsComponent } from './component/cart-details/cart-details.comp
 import { CheckoutComponent } from './component/checkout/checkout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { AuthGuard, AuthModule, AuthService } from '@auth0/auth0-angular';
+import { AuthGuard, AuthHttpInterceptor, AuthModule, AuthService } from '@auth0/auth0-angular';
 import { LoginComponent } from './component/login/login.component';
 import { LoginStatusComponent } from './component/login-status/login-status.component';
 import { MembersPageComponent } from './component/members-page/members-page.component';
@@ -72,11 +72,31 @@ const routes: Routes = [
       clientId: '4NqVSDiUS60mNQh50QauYr18K5EpO2Iz',
       authorizationParams: {
         redirect_uri: 'http://localhost:4200',
+        audience: 'http://localhost:8080',
         scope: 'openid profile email',
       },
+      httpInterceptor: {
+        allowedList: [
+          {
+            uri: 'http://localhost:8080/*',
+            tokenOptions: {
+              authorizationParams: {
+                audience: 'http://localhost:8080',
+                scope: 'openid profile email'
+              }
+            }
+          }
+        ]
+      }
     }),
   ],
-  providers: [ProductService],
+  providers: [ProductService, 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true
+    },
+    ],
   bootstrap: [AppComponent]
 })
 
